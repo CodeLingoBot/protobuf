@@ -19,7 +19,7 @@ import (
 // Set --regenerate to regenerate the golden files.
 var regenerate = flag.Bool("regenerate", false, "regenerate golden files")
 
-// When the environment variable RUN_AS_PROTOC_GEN_GO is set, we skip running
+// init; When the environment variable RUN_AS_PROTOC_GEN_GO is set, we skip running
 // tests and instead act as protoc-gen-go. This allows the test binary to
 // pass itself to protoc.
 func init() {

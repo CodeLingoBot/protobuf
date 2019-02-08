@@ -84,14 +84,14 @@ func (g *grpc) Init(gen *generator.Generator) {
 	g.gen = gen
 }
 
-// Given a type name defined in a .proto, return its object.
+// objectNamed; Given a type name defined in a .proto, return its object.
 // Also record that we're using it, to guarantee the associated import.
 func (g *grpc) objectNamed(name string) generator.Object {
 	g.gen.RecordTypeUse(name)
 	return g.gen.ObjectNamed(name)
 }
 
-// Given a type name defined in a .proto, return its name as we will print it.
+// typeName; Given a type name defined in a .proto, return its name as we will print it.
 func (g *grpc) typeName(str string) string {
 	return g.gen.TypeName(g.objectNamed(str))
 }

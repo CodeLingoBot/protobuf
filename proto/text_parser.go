@@ -99,7 +99,7 @@ func (p *textParser) errorf(format string, a ...interface{}) *ParseError {
 	return pe
 }
 
-// Numbers and identifiers are matched by [-+._A-Za-z0-9]
+// isIdentOrNumberChar numbers and identifiers are matched by [-+._A-Za-z0-9]
 func isIdentOrNumberChar(c byte) bool {
 	switch {
 	case 'A' <= c && c <= 'Z', 'a' <= c && c <= 'z':
@@ -321,7 +321,7 @@ func unescape(s string) (ch string, tail string, err error) {
 // It makes the next advance() a no-op.
 func (p *textParser) back() { p.backed = true }
 
-// Advances the parser and returns the new current token.
+// next advances the parser and returns the new current token.
 func (p *textParser) next() *token {
 	if p.backed || p.done {
 		p.backed = false
@@ -364,7 +364,7 @@ func (p *textParser) consumeToken(s string) error {
 	return nil
 }
 
-// Return a RequiredNotSetError indicating which required field was not set.
+// missingRequiredFieldError; Return a RequiredNotSetError indicating which required field was not set.
 func (p *textParser) missingRequiredFieldError(sv reflect.Value) *RequiredNotSetError {
 	st := sv.Type()
 	sprops := GetProperties(st)
@@ -381,7 +381,7 @@ func (p *textParser) missingRequiredFieldError(sv reflect.Value) *RequiredNotSet
 	return &RequiredNotSetError{fmt.Sprintf("%v.<unknown field name>", st)} // should not happen
 }
 
-// Returns the index in the struct for the named field, as well as the parsed tag properties.
+// structFieldByName returns the index in the struct for the named field, as well as the parsed tag properties.
 func structFieldByName(sprops *StructProperties, name string) (int, *Properties, bool) {
 	i, ok := sprops.decoderOrigNames[name]
 	if ok {
@@ -390,7 +390,7 @@ func structFieldByName(sprops *StructProperties, name string) (int, *Properties,
 	return -1, nil, false
 }
 
-// Consume a ':' from the input stream (if the next token is a colon),
+// checkForColon; Consume a ':' from the input stream (if the next token is a colon),
 // returning an error if a colon is needed but not present.
 func (p *textParser) checkForColon(props *Properties, typ reflect.Type) *ParseError {
 	tok := p.next()

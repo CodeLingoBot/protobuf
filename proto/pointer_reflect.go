@@ -133,7 +133,7 @@ func (p pointer) toInt32() *int32 {
 	return p.v.Convert(int32ptr).Interface().(*int32)
 }
 
-// The toInt32Ptr/Slice methods don't work because of enums.
+// getInt32Ptr; The toInt32Ptr/Slice methods don't work because of enums.
 // Instead, we must use set/get methods for the int32ptr/slice case.
 /*
 	func (p pointer) toInt32Ptr() **int32 {

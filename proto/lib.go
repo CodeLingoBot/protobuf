@@ -608,7 +608,7 @@ func SetDefaults(pb Message) {
 	setDefaults(reflect.ValueOf(pb), true, false)
 }
 
-// v is a pointer to a struct.
+// setDefaults; v is a pointer to a struct.
 func setDefaults(v reflect.Value, recur, zeros bool) {
 	v = v.Elem()
 
@@ -762,7 +762,7 @@ type scalarField struct {
 	value interface{}  // the proto-declared default value, or nil
 }
 
-// t is a struct type.
+// buildDefaultMessage; t is a struct type.
 func buildDefaultMessage(t reflect.Type) (dm defaultMessage) {
 	sprop := GetProperties(t)
 	for _, prop := range sprop.Prop {

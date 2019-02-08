@@ -613,7 +613,7 @@ func TestMarshalWithCustomValidation(t *testing.T) {
 	}
 }
 
-// Test marshaling message containing unset required fields should produce error.
+// TestMarshalUnsetRequiredFields tests marshaling message containing unset required fields should produce error.
 func TestMarshalUnsetRequiredFields(t *testing.T) {
 	msgExt := &pb.Real{}
 	proto.SetExtension(msgExt, pb.E_Extm, &pb.MsgWithRequired{})
@@ -1124,7 +1124,7 @@ func (m *dynamicMessage) UnmarshalJSONPB(jum *Unmarshaler, js []byte) error {
 	return nil
 }
 
-// Test unmarshaling message containing unset required fields should produce error.
+// TestUnmarshalUnsetRequiredFields tests unmarshaling message containing unset required fields should produce error.
 func TestUnmarshalUnsetRequiredFields(t *testing.T) {
 	tests := []struct {
 		desc string

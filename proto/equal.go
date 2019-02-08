@@ -92,7 +92,7 @@ func Equal(a, b Message) bool {
 	return equalStruct(v1, v2)
 }
 
-// v1 and v2 are known to have the same type.
+// equalStruct; v1 and v2 are known to have the same type.
 func equalStruct(v1, v2 reflect.Value) bool {
 	sprop := GetProperties(v1.Type())
 	for i := 0; i < v1.NumField(); i++ {
@@ -140,7 +140,7 @@ func equalStruct(v1, v2 reflect.Value) bool {
 	return bytes.Equal(u1, u2)
 }
 
-// v1 and v2 are known to have the same type.
+// equalAny; v1 and v2 are known to have the same type.
 // prop may be nil.
 func equalAny(v1, v2 reflect.Value, prop *Properties) bool {
 	if v1.Type() == protoMessageType {
@@ -227,7 +227,7 @@ func equalAny(v1, v2 reflect.Value, prop *Properties) bool {
 	return false
 }
 
-// base is the struct type that the extensions are based on.
+// equalExtensions; base is the struct type that the extensions are based on.
 // x1 and x2 are InternalExtensions.
 func equalExtensions(base reflect.Type, x1, x2 XXX_InternalExtensions) bool {
 	em1, _ := x1.extensionsRead()

@@ -193,7 +193,7 @@ func (p *Buffer) EncodeMessage(pb Message) error {
 	return p.Marshal(pb)
 }
 
-// All protocol buffer fields are nillable, but be careful.
+// isNil; All protocol buffer fields are nillable, but be careful.
 func isNil(v reflect.Value) bool {
 	switch v.Kind() {
 	case reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:

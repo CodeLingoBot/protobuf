@@ -137,7 +137,7 @@ func (p pointer) toInt32() *int32 {
 	return (*int32)(p.p)
 }
 
-// See pointer_reflect.go for why toInt32Ptr/Slice doesn't exist.
+// getInt32Ptr; See pointer_reflect.go for why toInt32Ptr/Slice doesn't exist.
 /*
 	func (p pointer) toInt32Ptr() **int32 {
 		return (**int32)(p.p)
@@ -167,6 +167,7 @@ func (p pointer) setInt32Slice(v []int32) {
 	*(*[]int32)(p.p) = v
 }
 
+// appendInt32Slice; 
 // TODO: Can we get rid of appendInt32Slice and use setInt32Slice instead?
 func (p pointer) appendInt32Slice(v int32) {
 	s := (*[]int32)(p.p)
@@ -268,7 +269,7 @@ func (p pointer) setPointer(q pointer) {
 	*(*unsafe.Pointer)(p.p) = q.p
 }
 
-// append q to the slice pointed to by p.
+// appendPointer; q to the slice pointed to by p.
 func (p pointer) appendPointer(q pointer) {
 	s := (*[]unsafe.Pointer)(p.p)
 	*s = append(*s, q.p)

@@ -546,7 +546,7 @@ func (tm *TextMarshaler) writeAny(w *textWriter, v reflect.Value, props *Propert
 	return nil
 }
 
-// equivalent to C's isprint.
+// isprint; equivalent to C's isprint.
 func isprint(c byte) bool {
 	return c >= 0x20 && c < 0x7f
 }

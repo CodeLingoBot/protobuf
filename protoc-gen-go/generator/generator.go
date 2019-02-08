@@ -189,7 +189,7 @@ func (e *EnumDescriptor) TypeName() (s []string) {
 	return s
 }
 
-// Everything but the last element of the full type name, CamelCased.
+// prefix; Everything but the last element of the full type name, CamelCased.
 // The values of type Foo.Bar are call Foo_value1... not Foo_Bar_value1... .
 func (e *EnumDescriptor) prefix() string {
 	if e.parent == nil {
@@ -200,7 +200,7 @@ func (e *EnumDescriptor) prefix() string {
 	return CamelCaseSlice(typeName[0:len(typeName)-1]) + "_"
 }
 
-// The integer value of the named constant in this enumerated type.
+// integerValueAsString; The integer value of the named constant in this enumerated type.
 func (e *EnumDescriptor) integerValueAsString(name string) string {
 	for _, c := range e.Value {
 		if c.GetName() == name {
@@ -556,7 +556,7 @@ var globalPackageNames = map[GoPackageName]bool{
 	"proto": true,
 }
 
-// Create and remember a guaranteed unique package name. Pkg is the candidate name.
+// RegisterUniquePackageName; Create and remember a guaranteed unique package name. Pkg is the candidate name.
 // The FileDescriptor parameter is unused.
 func RegisterUniquePackageName(pkg string, f *FileDescriptor) string {
 	name := cleanPackageName(pkg)
@@ -780,7 +780,7 @@ func (g *Generator) WrapTypes() {
 	}
 }
 
-// Scan the descriptors in this file.  For each one, build the slice of nested descriptors
+// buildNestedDescriptors; Scan the descriptors in this file.  For each one, build the slice of nested descriptors
 func (g *Generator) buildNestedDescriptors(descs []*Descriptor) {
 	for _, desc := range descs {
 		if len(desc.NestedType) != 0 {
@@ -811,7 +811,7 @@ func (g *Generator) buildNestedEnums(descs []*Descriptor, enums []*EnumDescripto
 	}
 }
 
-// Construct the Descriptor
+// newDescriptor; Construct the Descriptor
 func newDescriptor(desc *descriptor.DescriptorProto, parent *Descriptor, file *FileDescriptor, index int) *Descriptor {
 	d := &Descriptor{
 		common:          common{file},
@@ -848,7 +848,7 @@ func newDescriptor(desc *descriptor.DescriptorProto, parent *Descriptor, file *F
 	return d
 }
 
-// Return a slice of all the Descriptors defined within this file
+// wrapDescriptors; Return a slice of all the Descriptors defined within this file
 func wrapDescriptors(file *FileDescriptor) []*Descriptor {
 	sl := make([]*Descriptor, 0, len(file.MessageType)+10)
 	for i, desc := range file.MessageType {
@@ -857,7 +857,7 @@ func wrapDescriptors(file *FileDescriptor) []*Descriptor {
 	return sl
 }
 
-// Wrap this Descriptor, recursively
+// wrapThisDescriptor; Descriptor, recursively
 func wrapThisDescriptor(sl []*Descriptor, desc *descriptor.DescriptorProto, parent *Descriptor, file *FileDescriptor, index int) []*Descriptor {
 	sl = append(sl, newDescriptor(desc, parent, file, index))
 	me := sl[len(sl)-1]
@@ -867,7 +867,7 @@ func wrapThisDescriptor(sl []*Descriptor, desc *descriptor.DescriptorProto, pare
 	return sl
 }
 
-// Construct the EnumDescriptor
+// newEnumDescriptor; Construct the EnumDescriptor
 func newEnumDescriptor(desc *descriptor.EnumDescriptorProto, parent *Descriptor, file *FileDescriptor, index int) *EnumDescriptor {
 	ed := &EnumDescriptor{
 		common:              common{file},
@@ -883,7 +883,7 @@ func newEnumDescriptor(desc *descriptor.EnumDescriptorProto, parent *Descriptor,
 	return ed
 }
 
-// Return a slice of all the EnumDescriptors defined within this file
+// wrapEnumDescriptors; Return a slice of all the EnumDescriptors defined within this file
 func wrapEnumDescriptors(file *FileDescriptor, descs []*Descriptor) []*EnumDescriptor {
 	sl := make([]*EnumDescriptor, 0, len(file.EnumType)+10)
 	// Top-level enums.
@@ -899,7 +899,7 @@ func wrapEnumDescriptors(file *FileDescriptor, descs []*Descriptor) []*EnumDescr
 	return sl
 }
 
-// Return a slice of all the top-level ExtensionDescriptors defined within this file.
+// wrapExtensions; Return a slice of all the top-level ExtensionDescriptors defined within this file.
 func wrapExtensions(file *FileDescriptor) []*ExtensionDescriptor {
 	var sl []*ExtensionDescriptor
 	for _, field := range file.Extension {
@@ -908,7 +908,7 @@ func wrapExtensions(file *FileDescriptor) []*ExtensionDescriptor {
 	return sl
 }
 
-// Return a slice of all the types that are publicly imported into this file.
+// wrapImported; Return a slice of all the types that are publicly imported into this file.
 func wrapImported(file *FileDescriptor, g *Generator) (sl []*ImportedDescriptor) {
 	for _, index := range file.PublicDependency {
 		df := g.fileByName(file.Dependency[index])
@@ -966,7 +966,7 @@ func (g *Generator) BuildTypeNameMap() {
 	}
 }
 
-// ObjectNamed, given a fully-qualified input type name as it appears in the input data,
+// ObjectNamed; given a fully-qualified input type name as it appears in the input data,
 // returns the descriptor for the message or enum with that name.
 func (g *Generator) ObjectNamed(typeName string) Object {
 	o, ok := g.typeNameToObject[typeName]
@@ -1112,14 +1112,14 @@ func (g *Generator) GenerateAllFiles() {
 	}
 }
 
-// Run all the plugins associated with the file.
+// runPlugins; Run all the plugins associated with the file.
 func (g *Generator) runPlugins(file *FileDescriptor) {
 	for _, p := range plugins {
 		p.Generate(file)
 	}
 }
 
-// Fill the response protocol buffer with the generated output for all the files we're
+// generate; Fill the response protocol buffer with the generated output for all the files we're
 // supposed to generate.
 func (g *Generator) generate(file *FileDescriptor) {
 	g.file = file
@@ -1219,7 +1219,7 @@ func (g *Generator) generate(file *FileDescriptor) {
 	}
 }
 
-// Generate the header, including package definition
+// generateHeader; the header, including package definition
 func (g *Generator) generateHeader() {
 	g.P("// Code generated by protoc-gen-go. DO NOT EDIT.")
 	if g.file.GetOptions().GetDeprecated() {
@@ -1282,7 +1282,7 @@ func (g *Generator) weak(i int32) bool {
 	return false
 }
 
-// Generate the imports
+// generateImports; the imports
 func (g *Generator) generateImports() {
 	imports := make(map[GoImportPath]GoPackageName)
 	for i, s := range g.file.Dependency {
@@ -1355,7 +1355,7 @@ func (g *Generator) generateImported(id *ImportedDescriptor) {
 	g.P()
 }
 
-// Generate the enum definitions for this EnumDescriptor.
+// generateEnum; the enum definitions for this EnumDescriptor.
 func (g *Generator) generateEnum(enum *EnumDescriptor) {
 	// The full type name
 	typeName := enum.TypeName()
@@ -1449,7 +1449,7 @@ func (g *Generator) generateEnum(enum *EnumDescriptor) {
 	g.generateEnumRegistration(enum)
 }
 
-// The tag is a string like "varint,2,opt,name=fieldname,def=7" that
+// goTag; The tag is a string like "varint,2,opt,name=fieldname,def=7" that
 // identifies details of the field for the protocol buffer marshaling and unmarshaling
 // code.  The fields are:
 //	wire encoding
@@ -2191,7 +2191,7 @@ func (g *Generator) generateCommonMethods(mc *msgCtx) {
 	g.P()
 }
 
-// Generate the type, methods and default constant definitions for this Descriptor.
+// generateMessage; the type, methods and default constant definitions for this Descriptor.
 func (g *Generator) generateMessage(message *Descriptor) {
 	topLevelFields := []topLevelField{}
 	oFields := make(map[int32]*oneofField)
@@ -2644,12 +2644,12 @@ func (g *Generator) generateEnumRegistration(enum *EnumDescriptor) {
 
 // And now lots of helper functions.
 
-// Is c an ASCII lower-case letter?
+// isASCIILower; Is c an ASCII lower-case letter?
 func isASCIILower(c byte) bool {
 	return 'a' <= c && c <= 'z'
 }
 
-// Is c an ASCII digit?
+// isASCIIDigit; Is c an ASCII digit?
 func isASCIIDigit(c byte) bool {
 	return '0' <= c && c <= '9'
 }
@@ -2708,22 +2708,22 @@ func CamelCaseSlice(elem []string) string { return CamelCase(strings.Join(elem, 
 // dottedSlice turns a sliced name into a dotted name.
 func dottedSlice(elem []string) string { return strings.Join(elem, ".") }
 
-// Is this field optional?
+// isOptional; Is this field optional?
 func isOptional(field *descriptor.FieldDescriptorProto) bool {
 	return field.Label != nil && *field.Label == descriptor.FieldDescriptorProto_LABEL_OPTIONAL
 }
 
-// Is this field required?
+// isRequired; Is this field required?
 func isRequired(field *descriptor.FieldDescriptorProto) bool {
 	return field.Label != nil && *field.Label == descriptor.FieldDescriptorProto_LABEL_REQUIRED
 }
 
-// Is this field repeated?
+// isRepeated; Is this field repeated?
 func isRepeated(field *descriptor.FieldDescriptorProto) bool {
 	return field.Label != nil && *field.Label == descriptor.FieldDescriptorProto_LABEL_REPEATED
 }
 
-// Is this field a scalar numeric type?
+// isScalar; Is this field a scalar numeric type?
 func isScalar(field *descriptor.FieldDescriptorProto) bool {
 	if field.Type == nil {
 		return false

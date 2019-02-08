@@ -155,7 +155,7 @@ var nonFinite = map[string]float64{
 	`"-Infinity"`: math.Inf(-1),
 }
 
-// For sorting extensions ids to ensure stable output.
+// Len; For sorting extensions ids to ensure stable output.
 func (s int32Slice) Len() int           { return len(s) }
 func (s int32Slice) Less(i, j int) bool { return s[i] < s[j] }
 func (s int32Slice) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
